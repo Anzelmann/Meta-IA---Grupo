@@ -1,0 +1,482 @@
+{
+  "name": "I2A2_0706",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        840,
+        300
+      ],
+      "id": "0384036c-14e4-4beb-95d3-0cdeebda3a49",
+      "name": "Compression",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\\\Users\\\\Kcruz\\\\Downloads\\\\202401_NFs.zip",
+        "options": {
+          "dataPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        620,
+        300
+      ],
+      "id": "2e7f1780-c986-43e1-a6ec-757571476cee",
+      "name": "Read/Write Files from Disk",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "CHAVE DE ACESSO",
+              "field2": "CHAVE DE ACESSO"
+            }
+          ]
+        },
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1300,
+        280
+      ],
+      "id": "c41aa17e-d8dd-4c6d-9954-6559a758728b",
+      "name": "Merge",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file_0",
+        "options": {
+          "rawData": false
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        180
+      ],
+      "id": "d1234457-e93a-4a91-a1d2-41b2ac71a724",
+      "name": "Cabecalho",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file_1",
+        "options": {
+          "readAsString": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        400
+      ],
+      "id": "ab0bfc63-a1df-466e-b169-72339c9263aa",
+      "name": "Itens",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Você é um Agente de IA responsável pelo BI da empresa, provendo informações e insights relevantes sobre os dados fornecidos nos nodes anteriores e atendendo as perguntas dos usuário respondendo de forma clara, objetiva e com educação, independente da quantidade de vezes que o usuário perguntar a mesma pergunta, considerando idioma que o usuário faz a pergunta, considerando apenas o contexto abaixo:\n\n {{ $json.contexto }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        2300,
+        400
+      ],
+      "id": "ec96100d-6eeb-430e-9edf-f1a1e950fdf1",
+      "name": "AI Agent",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2460,
+        140
+      ],
+      "id": "a879fc06-1df2-484a-b4ef-65833caa8999",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Olá! Como posso te ajudar hoje ?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        -120
+      ],
+      "id": "d45a8764-7c82-4fc7-afee-557b4886e510",
+      "name": "When chat message received",
+      "webhookId": "88fa4513-aa15-49fc-a754-f618b7932823"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2760,
+        400
+      ],
+      "id": "0743f908-edd4-4a86-9249-40c97b32c5f9",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = '### DADOS DE VENDAS ###\\n\\n';\n\nfor (const item of items) {\n  texto += `numero_nota_fiscal: ${item.json.numero_nota_fiscal} | data_hora_emissao: ${item.json.data_hora_emissao} | cpf_cnpj_emitente: ${item.json.cpf_cnpj_emitente} | razao_social_emitente: ${item.json.razao_social_emitente} | uf_emitente: ${item.json.uf_emitente} | municipio_emitente: ${item.json.municipio_emitente} | nome_destinatario: ${item.json.nome_destinatario} | destino_da_operacao: ${item.json.destino_da_operacao} | descricao_do_produto_servico: ${item.json.descricao_do_produto_servico} | descricao_tipo_de_produto: ${item.json.descricao_tipo_de_produto} | quantidade: ${item.json.quantidade} | unidade: ${item.json.unidade} | valor_unitario: ${item.json.valor_unitario} | valor_total: ${item.json.valor_total}\\n`;\n}\n\nreturn [{ json: { contexto: texto } }]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1940,
+        280
+      ],
+      "id": "393a2085-1666-4361-80ad-f293f0872f92",
+      "name": "Code",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed1a6a4b-e6af-4574-86bf-a236816c42c0",
+              "name": "numero_nota_fiscal",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f7e547eb-3368-464b-a949-d80007524f5d",
+              "name": "data_hora_emissao",
+              "value": "={{ $json['DATA EMISSÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ae1e6e69-ae3b-48f2-996f-44fb654e5382",
+              "name": "cpf_cnpj_emitente",
+              "value": "={{ $json['CPF/CNPJ Emitente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "53e1fdb3-cc0d-4083-9232-b63abd3942e9",
+              "name": "razao_social_emitente",
+              "value": "={{ $json['RAZÃO SOCIAL EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4d978eeb-a0d4-4763-885e-3a9e7c488519",
+              "name": "uf_emitente",
+              "value": "={{ $json['UF EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "900e72d4-aace-4125-a5c0-e336414c1eec",
+              "name": "municipio_emitente",
+              "value": "={{ $json['MUNICÍPIO EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b90fdd00-aaec-47dc-8c8d-3153ccb96d8a",
+              "name": "nome_destinatario",
+              "value": "={{ $json['NOME DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "aa703a76-2034-4de2-ba56-4dc6ba8bb031",
+              "name": "destino_da_operacao",
+              "value": "={{ $json['DESTINO DA OPERAÇÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1891e8e2-fa63-4896-8585-5dd0d2bd6773",
+              "name": "descricao_do_produto_servico",
+              "value": "={{ $json['DESCRIÇÃO DO PRODUTO/SERVIÇO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2340603b-a24f-4478-90b8-417ba293b17a",
+              "name": "descricao_tipo_de_produto",
+              "value": "={{ $json['NCM/SH (TIPO DE PRODUTO)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ebd267e7-720a-4910-9700-8a3e5e7b3c10",
+              "name": "quantidade",
+              "value": "={{ $json.QUANTIDADE }}",
+              "type": "number"
+            },
+            {
+              "id": "61cb0901-16ff-4289-ab0a-a3eb7fb16913",
+              "name": "unidade",
+              "value": "={{ $json.UNIDADE }}",
+              "type": "string"
+            },
+            {
+              "id": "b0d7a848-890e-4e84-b2c4-705eaa9b5e71",
+              "name": "valor_unitario",
+              "value": "={{ $json['VALOR UNITÁRIO'] }}",
+              "type": "number"
+            },
+            {
+              "id": "7487737a-debd-4ad1-9981-01f5b624eed5",
+              "name": "valor_total",
+              "value": "={{ $json['VALOR TOTAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1620,
+        280
+      ],
+      "id": "230ea091-9b04-4bdf-bf7a-17dbb659c7fe",
+      "name": "Edit Fields",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2120,
+        0
+      ],
+      "id": "7e5baa45-bde8-4b88-a8ee-4099d8250b93",
+      "name": "Merge1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        2460,
+        620
+      ],
+      "id": "17912e33-c39f-4f20-baa6-62f99b5438e5",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2300,
+        620
+      ],
+      "id": "7936c4c2-9e99-4fbb-9e37-b1b54c76a2c2",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "N9ZbzkV0O9sOvpoI",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Cabecalho",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Itens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cabecalho": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Itens": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "488401d7-d185-4f7d-98c6-7299cde66d25",
+  "meta": {
+    "instanceId": "96000daf5adde69d821106ef02f30f5fede01cd2fbdeddf5dd346c23bc231dff"
+  },
+  "id": "fguwIKDseVka5EEM",
+  "tags": []
+}
