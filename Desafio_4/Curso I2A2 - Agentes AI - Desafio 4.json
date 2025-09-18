@@ -4,7 +4,7 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "a974ffa1-088e-42fc-b628-98e9318eb783",
+        "path": "e2f2a397-c388-42a4-bdf8-b5841d8b6975",
         "options": {
           "binaryPropertyName": "file"
         }
@@ -15,9 +15,9 @@
         -816,
         -944
       ],
-      "id": "936a4c81-663a-499d-93a0-647f21962f20",
+      "id": "b618cce3-b621-4bc7-9bcc-631fb4817305",
       "name": "Webhook",
-      "webhookId": "a974ffa1-088e-42fc-b628-98e9318eb783"
+      "webhookId": "e2f2a397-c388-42a4-bdf8-b5841d8b6975"
     },
     {
       "parameters": {
@@ -29,7 +29,7 @@
         -592,
         -944
       ],
-      "id": "4f4eb748-1cc3-47c9-9a58-b48b20bd4e3d",
+      "id": "12a7158f-f8cf-437d-8f30-3e5d5bae7d30",
       "name": "Compression1"
     },
     {
@@ -62,7 +62,7 @@
         416,
         -1616
       ],
-      "id": "32d30c65-bf49-4361-a019-85e8e44f881b",
+      "id": "ddb5a875-d445-49aa-a496-66b41dcfcb06",
       "name": "Insert Admissao",
       "credentials": {
         "supabaseApi": {
@@ -93,7 +93,7 @@
         416,
         -1424
       ],
-      "id": "11238f05-f42f-4cb8-871b-0984430b08e1",
+      "id": "77102c02-33a3-4c53-9e6e-0202122ece6a",
       "name": "Insert Afastamentos",
       "credentials": {
         "supabaseApi": {
@@ -124,7 +124,7 @@
         416,
         -1248
       ],
-      "id": "49e5018b-75de-4ee8-981a-2d4facdc3603",
+      "id": "65bc18cc-58b5-4f25-855b-b2402808a4b8",
       "name": "Insert Aprendiz",
       "credentials": {
         "supabaseApi": {
@@ -167,7 +167,7 @@
         416,
         -1056
       ],
-      "id": "44c2c2ea-0dfa-4062-9514-e0173e679ad3",
+      "id": "ddc73b2d-c230-4e87-a7d1-c6fdabb63b4a",
       "name": "Insert Ativos",
       "credentials": {
         "supabaseApi": {
@@ -202,7 +202,7 @@
         416,
         -864
       ],
-      "id": "7ed16ead-7528-4cea-b8a7-204f53d6eca0",
+      "id": "aab892a9-5bef-4dc9-a1c6-c9f2b09fcef2",
       "name": "Insert Desligados",
       "credentials": {
         "supabaseApi": {
@@ -215,7 +215,7 @@
       "parameters": {
         "mode": "combineBySql",
         "numberInputs": 9,
-        "query": "select input1.data_admissao, input4.matricula, input4.empresa, input4.cargo, input4.situacao,  input9.sindicato, input9.sindicato_uf, input9.valor_vr_dia, input9.dias_uteis \nfrom input4 \nleft join input1 on input4.matricula = input1.matricula\ninner join input9 on input4.sindicato = input9.sindicato_uf\nwhere input4.situacao = 'Trabalhando'\nand input4.cargo not ilike 'DIRETOR%'\nand input4.matricula not in(select matricula from input2)\nand input4.matricula not in(select matricula from input3)\nand input4.matricula not in(select matricula from input6)\nand input4.matricula not in(select matricula from input7)\nand input4.matricula not in(select matricula from input5 where input5.comunicado = true)",
+        "query": "select input4.matricula\n  , input4.empresa\n  , COALESCE(input1.data_admissao, '{{ $now.minus(6, 'months').format('yyyy-LL-dd') }}') as data_admissao\n  , input4.cargo\n  , input4.situacao\n  , input9.sindicato\n  , input9.sindicato_uf\n  , input9.valor_vr_dia\n  , input9.dias_uteis\n  , '{{ $('Webhook').item.json.body.Competencia }}' as competencia\nfrom input4 \nleft join input1 on input4.matricula = input1.matricula\nleft join input5 on input4.matricula = input5.matricula\ninner join input9 on input4.sindicato = input9.sindicato_uf",
         "options": {}
       },
       "type": "n8n-nodes-base.merge",
@@ -224,7 +224,7 @@
         1152,
         -976
       ],
-      "id": "2db26117-3c50-49f0-9be7-fe5c7926879a",
+      "id": "97f3c6de-0298-45dc-b21f-b6e89a083a72",
       "name": "Merge"
     },
     {
@@ -239,7 +239,7 @@
         192,
         -688
       ],
-      "id": "9ef4514d-e190-461d-a06c-13e2a67e1c35",
+      "id": "98765542-9437-45d1-bf66-9593ded25a8f",
       "name": "Planilha Estagio"
     },
     {
@@ -254,7 +254,7 @@
         192,
         -864
       ],
-      "id": "5b2536be-b81d-44cb-b79d-c111a9cd9b80",
+      "id": "aa100c23-d7cf-4fb3-b658-226a8d055e25",
       "name": "Planilha Desligados"
     },
     {
@@ -269,7 +269,7 @@
         192,
         -1056
       ],
-      "id": "e293994b-8428-4c0e-8de6-aad252fbdc6e",
+      "id": "8358c6ca-cb11-4762-9140-45f13e7bb92e",
       "name": "Planilha Ativos"
     },
     {
@@ -284,7 +284,7 @@
         192,
         -1248
       ],
-      "id": "00d5d52d-a403-4580-b5f7-35b9a8d568a1",
+      "id": "b2141dc7-2cb1-4c6a-ad9b-0729e9657d08",
       "name": "Planilha Aprendiz"
     },
     {
@@ -299,7 +299,7 @@
         192,
         -1424
       ],
-      "id": "72eef3d4-04a6-4103-9908-c47ca3dda49a",
+      "id": "7297bf2a-6a5f-41a2-a7bf-b1c808a2046b",
       "name": "Planilha Afastamentos"
     },
     {
@@ -314,7 +314,7 @@
         192,
         -1616
       ],
-      "id": "082f8461-e84d-4672-9feb-130814e55657",
+      "id": "d47d8f9f-bbb7-4eaf-abac-a15c34d6657d",
       "name": "Planilha Admissao",
       "executeOnce": false,
       "retryOnFail": false
@@ -341,7 +341,7 @@
         416,
         -688
       ],
-      "id": "d1914fa4-dfc9-402f-9715-98dce1552d30",
+      "id": "c24564dd-f64f-452a-9e63-d4fde38cf825",
       "name": "Insert Estagio",
       "credentials": {
         "supabaseApi": {
@@ -362,7 +362,7 @@
         192,
         -496
       ],
-      "id": "4f5f735c-9b7c-4ea2-aadd-a10cdb8302c1",
+      "id": "d2f756ce-dfca-4c7d-af6c-69e5d1be3d9d",
       "name": "Planilha Exterior"
     },
     {
@@ -387,7 +387,7 @@
         416,
         -496
       ],
-      "id": "4263e22f-8327-4637-b354-aaf6cbd44c65",
+      "id": "cfbcaad7-b541-465e-92a6-ad3c88f4df80",
       "name": "Insert Exterior",
       "credentials": {
         "supabaseApi": {
@@ -408,7 +408,7 @@
         208,
         -320
       ],
-      "id": "ebb6c3ee-39eb-48ed-8544-cd3ba437bc3f",
+      "id": "c8846daa-792d-45d4-848f-89b165905bb5",
       "name": "Planilha Ferias"
     },
     {
@@ -437,7 +437,7 @@
         416,
         -320
       ],
-      "id": "4673907e-db17-4b31-a1fc-ef3233c901ff",
+      "id": "635b4495-11a7-4248-920c-77f4c17cf9ca",
       "name": "Insert Ferias",
       "credentials": {
         "supabaseApi": {
@@ -460,7 +460,7 @@
         208,
         -128
       ],
-      "id": "a2cccf37-d059-4500-9c12-8d38a7b27b96",
+      "id": "929b4f61-3ca9-4ee0-9b1e-2472fdd88312",
       "name": "Planilha Base dias uteis",
       "alwaysOutputData": false
     },
@@ -476,7 +476,7 @@
         208,
         64
       ],
-      "id": "b349698e-38f2-4a23-aeaf-33ec04838f56",
+      "id": "0873dfb6-0eb2-40d1-ac06-d12c8a0a8630",
       "name": "Planilha Base valor sindicato"
     },
     {
@@ -499,7 +499,7 @@
         704,
         0
       ],
-      "id": "4ee0aa8b-02cc-432b-a33b-654968aba8ae",
+      "id": "9387e918-7aec-4d5a-b936-1f464335f8ee",
       "name": "Merge1",
       "alwaysOutputData": true
     },
@@ -513,7 +513,7 @@
         416,
         -128
       ],
-      "id": "88f0e7a8-f733-436f-8469-01052cc729a3",
+      "id": "c0f0b25d-ee3e-4ab3-92bd-f2badec12063",
       "name": "Code1"
     },
     {
@@ -546,7 +546,7 @@
         912,
         0
       ],
-      "id": "30791f54-49bd-4d87-b6a9-89da962c749f",
+      "id": "c0dbbda7-b965-474c-84c2-0ab01553877e",
       "name": "Insert Dados Sindicato",
       "credentials": {
         "supabaseApi": {
@@ -554,22 +554,6 @@
           "name": "Supabase account"
         }
       }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Olá, você é um analista de RH especializado em fechamento de folha e cálculo de vale refeição e vale alimentação.\nPreciso que você ajude na seguinte função:\n\n# Descrição do problema\n\nHoje, o cálculo da quantidade de dias para compra de benefícios é feito\nmanualmente a partir de planilhas. Esse processo envolve:\n• Conferência de datas de início e fim do contrato no mês.\n• Exclusão de colaboradores em férias (parcial ou integral por regra de\nsindicato).\n• Ajustes para datas quebradas.\n• Cálculo do número exato de dias a serem comprados para cada pessoa.\n• Geração de um layout de compra a ser enviado para o fornecedor.\n• Considerar as regras vigentes decorrentes dos acordos coletivos de cada\num dos sindicatos.\n\n# Objetivo\n\nAutomatizar o processo mensal de compra de VR (Vale Refeição), garantindo que\ncada colaborador receba o valor correto, considerando ausências, férias e datas\nde admissão ou desligamento e calendário de feriados.\n\n# Regras\n\n* Validar e corrigir: datas inconsistentes ou \"quebradas\", campos faltantes,\nférias mal preenchidas, feriados estaduais e municipais corretamente\naplicados\n* Cálculo automatizado do benefício: Com base nas informações da tabela Dados, calcular automaticamente:\n** Quantidade de dias úteis por colaborador (considerando os dias\núteis de cada sindicato, férias, afastamentos e data de\ndesligamento)\n** Valor total de Vale Refeição (VR) a ser concedido para cada\ncolaborador, de acordo com o valor de cada sindicato que o\nprofissional está vinculado, gerando o cálculo, correto e vigente.\n* Entrega final: Geração de uma planilha final para envio à operadora,\ncontendo o valor de VR a ser concedido e valor a ser pago pela empresa e\nprofissional, de acordo com Modelo da planilha aba “VR Mensal 05.2025”.\nConsiderar custo para empresa 80% do valor pago e 20% a ser descontado\ndo profissional.\n\n# Correções\n\n* Para colaboradores com data_admissao = null utilizar uma data de admissao padrão que deve ser a data de hoje menos 6 meses e adicionar a observação 'Data admissão ausente - verificar' na coluna 'Observacao geral'.\n* Utilizar valor_vr_dia e dias_uteis de cada colaborador, mas dias_uteis não está considerando feriados. Verificar se dentro do período tem algum feriado nacional que cai durante a semana e descontar a quantidade de feriados do dias_uteis. O perído de contabilização é do dia 15 do mês anterior ao mês competencia e até o dia 14 do mês de competencia.\n* Considerar somente feriados nacionais e aplique automaticamente.\n* Desconte a quantidade de feriados de todos os colaboradores.\n* Para os colaboradores que a data de admissão está dentro do período prorrete os dias_uteis e aplique o desconto dos dias.\n* Os colaboradores que estão na tabela Dados já foram filtrados e todos devem ser considerados para gerar a planilha.\n* Competencia a ser utilizada é informada no nome da planilha solicitada contido no command input: '{{ $json.body.command }}', com formato 'MM.YYYY'.\n\n# Resultado\nGere uma planilha XLSX e retorne o arquivo para download com as seguintes colunas:\nMatricula\nData admissao\nSindicato do colaborador\nCompetência\nDias úteis\nValor diário VR\nTotal\nCusto empresa\nDesconto colaborador\nObservacao geral\n\nConfirmo a geração da planilha.\nNão me faça mais perguntas e gere os dados AGORA e retorne o arquivo. Não usar caracteres especiais que possam quebrar o JSON. Preciso que retorne imediatamente o arquivo, que pode ser em formato JSON.",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2.2,
-      "position": [
-        7280,
-        656
-      ],
-      "id": "d52e901f-5634-4b29-93f7-d129dea98307",
-      "name": "AI Agent1",
-      "disabled": true
     },
     {
       "parameters": {
@@ -611,6 +595,10 @@
             {
               "fieldId": "dias_uteis",
               "fieldValue": "={{ $json.dias_uteis }}"
+            },
+            {
+              "fieldId": "competencia",
+              "fieldValue": "={{ $json.competencia }}"
             }
           ]
         }
@@ -621,7 +609,7 @@
         1424,
         -864
       ],
-      "id": "2f3a7c68-e0af-4b60-8636-34f6b310933f",
+      "id": "e457d33f-9ac2-44a1-95de-d59fa3116ee0",
       "name": "Create a row",
       "credentials": {
         "supabaseApi": {
@@ -629,78 +617,6 @@
           "name": "Supabase account"
         }
       }
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "c7d2d296-b7ad-4088-bad3-6e5fb0bc50c4",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        6960,
-        656
-      ],
-      "id": "8a072e0b-e8b6-411e-b1e6-02197ff9639b",
-      "name": "Webhook1",
-      "webhookId": "c7d2d296-b7ad-4088-bad3-6e5fb0bc50c4",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "tableId": "Dados",
-        "returnAll": true,
-        "filterType": "none"
-      },
-      "type": "n8n-nodes-base.supabaseTool",
-      "typeVersion": 1,
-      "position": [
-        7520,
-        912
-      ],
-      "id": "0fac5d08-0fe7-46f8-b8ca-f0f7c47692d6",
-      "name": "Get many rows in Supabase",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "xlsx",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.convertToFile",
-      "typeVersion": 1.1,
-      "position": [
-        7744,
-        656
-      ],
-      "id": "032d1ba2-1c64-4cf4-a33c-8a1122e2fcec",
-      "name": "Convert to File",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "content": "## Agente AI - Desativado",
-        "height": 752,
-        "width": 1440,
-        "color": 7
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        6688,
-        464
-      ],
-      "typeVersion": 1,
-      "id": "a8d9ffee-4f73-4141-87ca-b8f6ba2d79f7",
-      "name": "Sticky Note",
-      "disabled": true
     },
     {
       "parameters": {
@@ -714,154 +630,64 @@
         -1696
       ],
       "typeVersion": 1,
-      "id": "eb300ebf-e70b-4301-adb1-17fc73b629e2",
+      "id": "7a6ce5d2-c655-4fad-bdb2-176ef3be5a0d",
       "name": "Sticky Note1"
     },
     {
       "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1-mini"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        7184,
-        928
-      ],
-      "id": "cf1194ff-4863-42dc-9b45-104b17032f01",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "7Uy9XwZxpSnqYGPQ",
-          "name": "OpenAi account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Webhook1').item.json.body.command }}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        7360,
-        912
-      ],
-      "id": "c8d37606-b596-4855-b5c8-36131f3ee1eb",
-      "name": "Simple Memory",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Olá, preciso da quantidade de feriados nacionais dentro do período da competência informada.\n\n* O perído de contabilização é do dia 15 do mês anterior ao mês competencia e até o dia 14 do mês de competencia.\n* Considerar somente feriados nacionais.\n* Competencia a ser utilizada é informada no nome da planilha solicitada contido no command input: '{{ $json.command }}', com formato 'MM.YYYY'.\n\nRetornar a quantidade de feriados e a competencia utilizada em formato JSON. Não usar caracteres especiais que possam quebrar o JSON.",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2.2,
-      "position": [
-        2368,
-        -912
-      ],
-      "id": "5df4adb2-c6ce-4657-8838-536dbad5f508",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "tableId": "Dados",
-        "returnAll": true,
-        "filterType": "none"
-      },
-      "type": "n8n-nodes-base.supabaseTool",
-      "typeVersion": 1,
-      "position": [
-        2608,
-        -656
-      ],
-      "id": "a06ebf41-c652-45c7-a84b-bafd4f3adeea",
-      "name": "Get many rows in Supabase1",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "content": "## Agente AI",
-        "height": 800,
-        "width": 1504,
+        "height": 1248,
+        "width": 2448,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2144,
-        -1120
+        2128,
+        -1328
       ],
       "typeVersion": 1,
-      "id": "f69d7960-f0a3-4866-812f-c56a1a2f27ee",
+      "id": "0e1adfca-9ad1-4808-bacd-438c72d988f4",
       "name": "Sticky Note2"
     },
     {
       "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4.1-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4.1-mini"
-        },
-        "options": {}
+        "promptType": "define",
+        "text": "=Processe este lote:\n\nLote: {{ $json.lote_numero }} de {{ $json.total_lotes }}\nCompetência: {{ $json.competencia }}\nRegistros: {{ $json.registros.length }}\n\nDados:\n{{ JSON.stringify($json.registros, null, 2) }}\n\nIMPORTANTE: Retorne JSON válido com TODOS os {{ $json.registros.length }} registros processados.",
+        "options": {
+          "systemMessage": "Você é um especialista em cálculo de VR/VA. Processe TODOS os registros do lote recebido.\n\nREGRAS:\n1. Período: 16 do mês anterior a 15 do mês competência\n2. Feriados 2025: 01/01, 21/04, 01/05, 07/09, 12/10, 02/11, 15/11, 25/12\n3. Data admissão null: usar hoje - 6 meses + observação\n4. Cálculo: (dias_uteis - feriados_no_periodo) × valor_vr_dia\n5. Empresa paga 80%, colaborador 20%\n\nFORMATO DE SAÍDA - JSON OBRIGATÓRIO:\n{\n  \"lote\": number,\n  \"processados\": number,\n  \"dados\": [\n    {\n      \"Matricula\": \"string\",\n      \"Data_admissao\": \"DD/MM/YYYY\",\n      \"Sindicato\": \"string\",\n      \"Competencia\": \"MM.YYYY\",\n      \"Dias_uteis\": number,\n      \"Valor_diario_VR\": number,\n      \"Total\": number,\n      \"Custo_empresa\": number,\n      \"Desconto_colaborador\": number,\n      \"Observacao\": \"string\"\n    }\n  ],\n  \"status\": \"sucesso\"\n}\n\nProcesse AGORA todos os registros do lote e retorne JSON válido."
+        }
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
       "position": [
-        2304,
+        3008,
+        -880
+      ],
+      "id": "677d6628-46f5-4ba7-be2b-3fc4bf9f48dc",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.1,
+          "topP": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3008,
         -640
       ],
-      "id": "b4f5623e-1a39-437f-b0b5-0e5aa4160c06",
-      "name": "OpenAI Chat Model1",
+      "id": "19aa5c72-5a37-44c1-a0ed-45d5e9c196d2",
+      "name": "OpenRouter Chat Model1",
       "credentials": {
-        "openAiApi": {
-          "id": "7Uy9XwZxpSnqYGPQ",
-          "name": "OpenAi account"
+        "openRouterApi": {
+          "id": "5nBabh41sCIYmwHC",
+          "name": "OpenRouter account"
         }
       }
-    },
-    {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Webhook').item.json.body.Command }}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        2448,
-        -656
-      ],
-      "id": "80747190-43af-4dcd-af98-fd6ab8365763",
-      "name": "Simple Memory1"
-    },
-    {
-      "parameters": {
-        "jsCode": "const outputString = $input.first().json.output;\nconst jsonStartIndex = outputString.indexOf('{');\nconst jsonEndIndex = outputString.lastIndexOf('}');\nconst jsonSubstring = outputString.substring(jsonStartIndex, jsonEndIndex + 1);\nconst result = JSON.parse(jsonSubstring);\nreturn result;"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2720,
-        -912
-      ],
-      "id": "648ca2f7-fb65-4a6b-93db-79f8a52a22da",
-      "name": "Code"
     },
     {
       "parameters": {
@@ -872,11 +698,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2928,
-        -912
+        2496,
+        -880
       ],
-      "id": "87e2a5f1-2b59-4ed5-adea-4bcdfe126517",
-      "name": "Get many rows",
+      "id": "0b92e0b4-fc4e-4d45-8b3d-9669bc56f40f",
+      "name": "Get many rows1",
       "credentials": {
         "supabaseApi": {
           "id": "EdsgIxto4MB9Y2FM",
@@ -885,109 +711,79 @@
       }
     },
     {
-      "parameters": {
-        "operation": "update",
-        "tableId": "Dados",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "id",
-              "condition": "eq",
-              "keyValue": "={{ $json.id }}"
-            }
-          ]
-        },
-        "fieldsUi": {
-          "fieldValues": [
-            {
-              "fieldId": "dias_uteis",
-              "fieldValue": "={{ $json.dias_uteis - $('Code').item.json.quantidade_feriados_nacionais }}"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
       "position": [
-        3136,
-        -912
+        2048,
+        -864
       ],
-      "id": "6d56d7ab-ac64-4cb1-8667-c967fee13fdc",
-      "name": "Update a row",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
+      "id": "6f587b5b-38d1-4345-bc39-e5a07738e5d0",
+      "name": "Wait",
+      "webhookId": "241ccd7c-7ae5-4651-bacb-b202a9a8280c"
     },
     {
       "parameters": {
-        "jsCode": "const dataAtual = new Date(); // Cria um novo objeto Date com a data e hora atuais [6]\nconst seisMesesAtras = new Date(dataAtual); // Cria uma cópia da data atual para evitar modificar o original\nseisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6); // Subtrai 6 meses\n\nconst dadosParaPlanilha = $input.all().map(item => {\n  const dados = item.json;\n  \n  return {\n    json: {\n      'Matricula': dados.matricula || '',\n      'Admissao': dados.data_admissao || seisMesesAtras.toISOString().substring(0, 10),\n      'Sindicato': dados.sindicato || '',\n      'Competencia': $('Code').first().json.competencia || '01.1990',\n      'Dias': dados.dias_uteis || '22',\n      'Valor Diário VR': dados.valor_vr_dia || 0.0,\n      'Total': dados.dias_uteis * dados.valor_vr_dia || 0.0,\n      'Custo empresa': (dados.dias_uteis * dados.valor_vr_dia) * 0.8 || 0.0,\n      'Desconto profissional': (dados.dias_uteis * dados.valor_vr_dia) * 0.2 || 0.0,\n      'Observacao geral': `FERIADOS: ${$('Code').first().json.quantidade_feriados_nacionais.toString()} ${dados.data_admissao ? '' : ' ||----|| VERIFICAR - Data admissão ausente, preenchida com data atual - 6 meses conforme definicação do RH'}`\n    }\n  };\n});\n\nconst totalRegistros = dadosParaPlanilha.length;\nconst dataProcessamento = new Date().toLocaleString('pt-BR');\n\nconsole.log(`Processados ${totalRegistros} registros em ${dataProcessamento}`);\n\nreturn dadosParaPlanilha;"
+        "mode": "runOnceForEachItem",
+        "jsCode": "const response = $input.item.json;\nlet dadosProcessados;\n\ntry {\n  console.log('### ==> ', response)\n  // Tentar parsear a resposta da AI\n  if (typeof response.choices?.[0]?.message?.content === 'string') {\n    dadosProcessados = JSON.parse(response.choices[0].message.content);\n  } else if (typeof response.output === 'string') {\n    const jsonSplit = response.output.split('```json')\n    console.log('### ==> ', jsonSplit)\n    dadosProcessados = JSON.parse(jsonSplit[jsonSplit.length-1].replace('```', ''));\n  } else if (typeof response === 'object' && response.dados) {\n    dadosProcessados = response;\n  } else {\n    throw new Error('Formato de resposta inválido');\n  }\n  \n  // Validar estrutura\n  if (!dadosProcessados.dados || !Array.isArray(dadosProcessados.dados)) {\n    throw new Error('Dados não encontrados ou formato inválido');\n  }\n  \n  console.log(`Lote ${dadosProcessados.lote}: ${dadosProcessados.dados.length} registros processados`);\n  \n  return {\n    json: {\n      ...dadosProcessados,\n      status_processamento: 'sucesso',\n      timestamp: new Date().toISOString()\n    }\n  };\n  \n} catch (error) {\n  console.log(`Erro no lote: ${error.message}`);\n  \n  return [{\n    json: {\n      lote: $('Split em Lotes').item.json.lote_numero || 0,\n      dados: [],\n      processados: 0,\n      status_processamento: 'erro',\n      erro: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3344,
-        -912
+        3360,
+        -880
       ],
-      "id": "20db2e08-cbf9-45d5-ae00-9e3ee642bf03",
-      "name": "Code2"
+      "id": "468788e8-ee1a-465c-9c4a-b307eb969c2e",
+      "name": "Validar Resposta AI",
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "operation": "toFile",
-        "fileFormat": "xlsx",
-        "options": {
-          "fileName": "={{ $('Webhook').item.json.body.Command.split(\"'\")[1] }}"
-        }
+        "jsCode": "// Configurações\nconst BATCH_SIZE = 200; // Ajuste conforme necessário \nconst competencia = $input.first().json.competencia || '05.2025';\n\n// Pegar dados do Supabase\nconst dados = $input.all();\nconsole.log(`Total de registros recebidos: ${dados.length}`);\n\n// Dividir em lotes\nconst lotes = [];\nfor (let i = 0; i < dados.length; i += BATCH_SIZE) {\n  const lote = {\n    lote_numero: Math.floor(i / BATCH_SIZE) + 1,\n    total_lotes: Math.ceil(dados.length / BATCH_SIZE),\n    registros: dados.slice(i, i + BATCH_SIZE),\n    competencia: competencia,\n    total_registros_originais: dados.length\n  };\n  \n  lotes.push(lote);\n  console.log(`Lote ${lote.lote_numero} criado com ${lote.registros.length} registros`);\n}\n\n// Retornar cada lote como item separado\nreturn lotes.map(lote => ({\n  json: lote\n}));"
       },
-      "id": "ee2fd1a8-79b1-443a-a92e-59c09fe35db8",
-      "name": "Create XLSX",
-      "type": "n8n-nodes-base.spreadsheetFile",
+      "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2960,
-        -608
-      ]
+        2752,
+        -880
+      ],
+      "id": "41f9891b-d160-4777-9b80-5d8bd9b4d437",
+      "name": "Split em Lotes",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "9731f1d5-6e14-4c4f-af66-8fc46e48c412",
-              "name": "command",
-              "value": "={{ $('Webhook').item.json.body.Command }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "// Coletar TODOS os lotes processados (agora funcionará corretamente)\nconst todosLotes = $input.all();\nconsole.log(`📊 Iniciando merge de ${todosLotes.length} lotes`);\n\nlet dadosFinais = [];\nlet totalProcessados = 0;\nlet totalComErro = 0;\nlet lotesDetalhados = [];\n\n// Consolidar dados de todos os lotes\nfor (let i = 0; i < todosLotes.length; i++) {\n  const loteItem = todosLotes[i];\n  const loteData = loteItem.json;\n  \n  console.log(`📦 Processando lote ${i + 1}: Status = ${loteData.status_processamento}`);\n  \n  // Salvar detalhes do lote para debug\n  lotesDetalhados.push({\n    lote_numero: loteData.lote || (i + 1),\n    status: loteData.status_processamento,\n    registros_processados: loteData.dados?.length || 0,\n    erro: loteData.erro || null\n  });\n  \n  if (loteData.status_processamento === 'sucesso' && loteData.dados && Array.isArray(loteData.dados)) {\n    loteData.dados.map(item => {\n      dadosFinais.push({\n          'Matricula': item.Matricula || '',\n          'Admissao': item.Data_admissao || '',\n          'Sindicato': item.Sindicato || '',\n          'Competencia': item.Competencia || '',\n          'Dias': item.Dias_uteis || '22',\n          'ValorDiarioVR': item.Valor_diario_VR || 0.0,\n          'Total': item.Total || 0.0,\n          'CustoEmpresa': item.Custo_empresa || 0.0,\n          'DescontoProfissional': item.Desconto_colaborador || 0.0,\n          'ObservacaoGeral': item.Observacao\n      })\n    })\n    // dadosFinais = dadosFinais.concat(loteData.dados);\n    totalProcessados += loteData.processados || loteData.dados.length;\n    console.log(`✅ Lote ${loteData.lote}: ${loteData.dados.length} registros adicionados`);\n  } else {\n    totalComErro++;\n    console.error(`❌ Lote ${loteData.lote} com erro: ${loteData.erro}`);\n  }\n}\n\n// Calcular resumos financeiros\nconst valorTotal = dadosFinais.reduce((sum, item) => sum + (parseFloat(item.Total) || 0), 0);\nconst custoEmpresa = dadosFinais.reduce((sum, item) => sum + (parseFloat(item.Custo_empresa) || 0), 0);\nconst descontoColaborador = dadosFinais.reduce((sum, item) => sum + (parseFloat(item.Desconto_colaborador) || 0), 0);\n\n// Resultado final consolidado\nconst resultado = {\n  dados: dadosFinais,\n  resumo: {\n    total_colaboradores: dadosFinais.length,\n    total_processados: totalProcessados,\n    total_lotes: todosLotes.length,\n    lotes_sucesso: todosLotes.length - totalComErro,\n    lotes_com_erro: totalComErro,\n    valor_total_geral: parseFloat(valorTotal.toFixed(2)),\n    custo_total_empresa: parseFloat(custoEmpresa.toFixed(2)),\n    desconto_total_colaborador: parseFloat(descontoColaborador.toFixed(2))\n  },\n  metadata: {\n    competencia: todosLotes[0]?.json?.competencia || '',\n    processamento_completo: totalComErro === 0,\n    timestamp: new Date().toISOString(),\n    lotes_detalhados: lotesDetalhados\n  }\n};\n\nconsole.log(`🎉 Processamento concluído: ${dadosFinais.length} registros finais de ${todosLotes.length} lotes`);\nconsole.log(`💰 Valor total: R$ ${valorTotal.toFixed(2)}`);\n\nreturn [{ json: resultado }];"
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        1904,
-        -864
+        3616,
+        -880
       ],
-      "id": "ef6b00a0-e781-47dd-ad52-209938b65174",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.limit",
-      "typeVersion": 1,
-      "position": [
-        1648,
-        -864
-      ],
-      "id": "eeb8ce8d-c7dd-4535-8d9f-d075d11bb37f",
-      "name": "Limit"
+      "id": "2936b5ec-228a-4a72-aadf-e33edbecdeac",
+      "name": "Merge Resultados"
     },
     {
       "parameters": {
-        "name": "={{ $('Webhook').item.json.body.Command.split(\"'\")[1] }}",
+        "jsCode": "// =============================================================================\n// CODE NODE: GERAR XLSX MANUAL - IMPLEMENTAÇÃO FINAL\n// =============================================================================\n\n// Pegar dados consolidados do merge anterior\nconst resultado = $input.first().json;\nconst dados = resultado.dados;\n\nconsole.log(`📊 Iniciando geração XLSX com ${dados.length} registros`);\nconsole.log(`📊 Competência: ${resultado.metadata.competencia}`);\n\n// Validar se temos dados\nif (!dados || !Array.isArray(dados) || dados.length === 0) {\n    console.error('❌ Nenhum dado encontrado para gerar planilha');\n    return [{\n        json: {\n            error: true,\n            message: 'Nenhum dado encontrado para gerar planilha',\n            recordCount: 0\n        }\n    }];\n}\n\n// =============================================================================\n// PREPARAR DADOS PARA CSV/XLSX\n// =============================================================================\n\nlet csvContent = '';\n\n// Headers da planilha\nconst headers = [\n    'Matrícula',\n    'Admissão', \n    'Sindicato do Colaborador',\n    'Competência',\n    'Dias',\n    'Valor Diário VR',\n    'Total',\n    'Custo Empresa',\n    'Desconto Profissional',\n    'Observação Geral'\n];\n\n// Adicionar headers ao CSV\ncsvContent += headers.join(',') + '\\n';\n\n// Processar cada linha de dados\nlet linhasProcessadas = 0;\ndados.forEach((item, index) => {\n    try {\n        // Extrair dados com fallback para diferentes formatos de campo\n        const matricula = item.Matricula || item.matricula || '';\n        const dataAdmissao = item.Admissao || item[\"Data admissao\"] || item.data_admissao || '';\n        const sindicato = item.Sindicato || item[\"Sindicato do colaborador\"] || item.sindicato || '';\n        const competencia = item.Competencia || item[\"Competência\"] || item.competencia || resultado.metadata.competencia || '';\n        const diasUteis = item.Dias || item[\"Dias úteis\"] || item.dias_uteis || 0;\n        const valorDiario = parseFloat(item.ValorDiarioVR || item[\"Valor diário VR\"] || item.valor_vr_dia || 0).toFixed(2);\n        const total = parseFloat(item.Total || item.total || 0).toFixed(2);\n        const custoEmpresa = parseFloat(item.CustoEmpresa || item[\"Custo empresa\"] || item.custo_empresa || 0).toFixed(2);\n        const descontoColaborador = parseFloat(item.DescontoProfissional || item[\"Desconto colaborador\"] || item.desconto_colaborador || 0).toFixed(2);\n        const observacao = item.ObservacaoGeral || item[\"Observacao geral\"] || item.Observacao_geral || item.observacao || '';\n\n        // Criar linha CSV (escapando aspas duplas)\n        const row = [\n            `\"${String(matricula).replace(/\"/g, '\"\"')}\"`,\n            `\"${String(dataAdmissao).replace(/\"/g, '\"\"')}\"`,\n            `\"${String(sindicato).replace(/\"/g, '\"\"')}\"`,\n            `\"${String(competencia).replace(/\"/g, '\"\"')}\"`,\n            `\"${diasUteis}\"`,\n            `\"${valorDiario}\"`,\n            `\"${total}\"`,\n            `\"${custoEmpresa}\"`,\n            `\"${descontoColaborador}\"`,\n            `\"${String(observacao).replace(/\"/g, '\"\"')}\"`\n        ];\n\n        csvContent += row.join(',') + '\\n';\n        linhasProcessadas++;\n\n    } catch (error) {\n        console.error(`❌ Erro ao processar linha ${index + 1}:`, error.message);\n        console.error(`❌ Dados da linha:`, JSON.stringify(item, null, 2));\n    }\n});\n\n// =============================================================================\n// ADICIONAR LINHA DE TOTAIS\n// =============================================================================\n\nconst resumo = resultado.resumo || {};\nconst rowTotais = [\n    '\"TOTAIS\"',\n    '\"\"', // Data Admissão vazia\n    '\"\"', // Sindicato vazio\n    `\"${resultado.metadata.competencia || ''}\"`,\n    '\"\"', // Dias Úteis vazio\n    '\"\"', // Valor Diário vazio\n    `\"${parseFloat(resumo.valor_total_geral || 0).toFixed(2)}\"`,\n    `\"${parseFloat(resumo.custo_total_empresa || 0).toFixed(2)}\"`,\n    `\"${parseFloat(resumo.desconto_total_colaborador || 0).toFixed(2)}\"`,\n    `\"Total: ${resumo.total_colaboradores || linhasProcessadas} colaboradores\"`\n];\n\ncsvContent += rowTotais.join(',') + '\\n';\n\n// =============================================================================\n// GERAR ARQUIVO\n// =============================================================================\n\n// Nome do arquivo com timestamp\nconst competencia = resultado.dados[0].Competencia || 'XX_XXXX';\nconst timestamp = new Date().toISOString()\n    .slice(0, 16)\n    .replace(/[:T-]/g, '_');\nconst fileName = `VR Mensal ${competencia}.xlsx`;\n\n// Criar buffer com BOM para UTF-8 (garante acentos corretos no Excel)\nconst csvWithBom = '\\ufeff' + csvContent;\nconst buffer = Buffer.from(csvWithBom, 'utf8');\n\n// Estatísticas finais\nconst fileStats = {\n    totalLinhas: linhasProcessadas + 1, // +1 pela linha de totais\n    tamanhoArquivo: buffer.length,\n    competencia: competencia,\n    valorTotal: resumo.valor_total_geral || 0\n};\n\nconsole.log(`✅ Arquivo gerado com sucesso:`);\nconsole.log(`   📄 Nome: ${fileName}`);\nconsole.log(`   📊 Registros: ${linhasProcessadas}`);\nconsole.log(`   💰 Valor Total: R$ ${parseFloat(resumo.valor_total_geral || 0).toFixed(2)}`);\nconsole.log(`   📦 Tamanho: ${Math.round(buffer.length / 1024)} KB`);\n\n// =============================================================================\n// RETORNO FINAL\n// =============================================================================\n\nreturn [{\n    json: {\n        success: true,\n        fileName: fileName,\n        recordCount: linhasProcessadas,\n        totalAmount: parseFloat(resumo.valor_total_geral || 0).toFixed(2),\n        fileSize: buffer.length,\n        competencia: competencia,\n        timestamp: new Date().toISOString(),\n        stats: fileStats,\n        metadata: resultado.metadata\n    },\n    binary: {\n        data: buffer,\n        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',\n        fileName: fileName,\n        fileExtension: 'xlsx'\n    }\n}];\n\n// =============================================================================\n// FIM DO CODE NODE\n// ============================================================================="
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3824,
+        -880
+      ],
+      "id": "a5e047f1-0df1-4155-b21d-f1a21a72d914",
+      "name": "Gerar XLSX",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.fileName }}",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -995,391 +791,34 @@
         },
         "folderId": {
           "__rl": true,
-          "value": "1VH2OrL0jp_OR67vj9ooy-MXk2L0q1W9F",
+          "value": "1PwylenfET8K8dQs-v-31ICPZyu16PFFm",
           "mode": "list",
-          "cachedResultName": "Curso I2A2",
-          "cachedResultUrl": "https://drive.google.com/drive/folders/1VH2OrL0jp_OR67vj9ooy-MXk2L0q1W9F"
+          "cachedResultName": "Desafio 4 - Dados",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1PwylenfET8K8dQs-v-31ICPZyu16PFFm"
         },
-        "options": {}
+        "options": {
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "mimeType",
+                "value": "'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+              }
+            ]
+          }
+        }
       },
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        3168,
-        -608
+        4112,
+        -880
       ],
-      "id": "fc31c165-e47d-4aab-81b4-18515d7550b0",
-      "name": "Upload file",
+      "id": "3da63ab9-220f-4b2a-a29e-7a735429aba2",
+      "name": "Upload file2",
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "TYRe3LHdK36X23AI",
           "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Desligados",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -1376
-      ],
-      "id": "41ec8471-947c-4669-b025-7994f584d161",
-      "name": "Delete Desligados",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Afastamentos",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -1216
-      ],
-      "id": "c0a39bdd-3bce-4e89-8c02-879e77cac98c",
-      "name": "Delete Afastamentos",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Estagiario",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -1056
-      ],
-      "id": "fd7f886b-290e-4007-88b8-9ffa5e184038",
-      "name": "Delete Estagiario",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Ferias",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -896
-      ],
-      "id": "8fb3d34c-e6da-4cf7-b03e-bf2443a96ee9",
-      "name": "Delete Ferias",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Sindicato",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "id",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -736
-      ],
-      "id": "665612eb-b95b-4b2b-a63a-07a9384dd638",
-      "name": "Delete Sindicato",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Exterior",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -576
-      ],
-      "id": "8da9df00-e314-4141-a1da-b70c288abd96",
-      "name": "Delete Exterior",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Aprendiz",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -416
-      ],
-      "id": "cf5ddb05-e370-4469-bbcf-580051a157ca",
-      "name": "Delete Aprendiz",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Admissao",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        -240
-      ],
-      "id": "d6dc17e0-3fb8-4cb1-b2da-d73dff80b79d",
-      "name": "Delete Admissao",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Dados",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "id",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4032,
-        80
-      ],
-      "id": "47699579-d2ba-46ee-b9ad-10b2b3191a3e",
-      "name": "Delete Dados",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "tableId": "Ativos",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "matricula",
-              "condition": "gt",
-              "keyValue": "0"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        4016,
-        -80
-      ],
-      "id": "792567a8-3f6e-4aec-89f6-ddc65c480faa",
-      "name": "Delete Ativos",
-      "credentials": {
-        "supabaseApi": {
-          "id": "EdsgIxto4MB9Y2FM",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "content": "## Limpar Daabase",
-        "height": 1872,
-        "width": 448,
-        "color": 4
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        3856,
-        -1520
-      ],
-      "typeVersion": 1,
-      "id": "044c866a-fcf6-482b-8641-c75b95365b23",
-      "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "numberInputs": 10
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        4656,
-        -832
-      ],
-      "id": "690dd45f-e09f-4ea5-8ab3-82345afc41a9",
-      "name": "Merge2"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.limit",
-      "typeVersion": 1,
-      "position": [
-        4864,
-        -704
-      ],
-      "id": "0b980c4e-dd47-4210-8e3b-4fec5a5e8858",
-      "name": "Limit1"
-    },
-    {
-      "parameters": {
-        "resource": "message",
-        "guildId": {
-          "__rl": true,
-          "value": "691396300846923797",
-          "mode": "list",
-          "cachedResultName": "tmps",
-          "cachedResultUrl": "https://discord.com/channels/691396300846923797"
-        },
-        "channelId": {
-          "__rl": true,
-          "value": "691396301509754982",
-          "mode": "list",
-          "cachedResultName": "geral",
-          "cachedResultUrl": "https://discord.com/channels/691396300846923797/691396301509754982"
-        },
-        "content": "Arquivo gerado com sucesso!",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.discord",
-      "typeVersion": 2,
-      "position": [
-        5072,
-        -704
-      ],
-      "id": "2f52c101-907c-4d24-9ade-460aebc6c096",
-      "name": "Send a message",
-      "webhookId": "ce687b0b-f60a-4619-84e6-e780d952e5c7",
-      "credentials": {
-        "discordBotApi": {
-          "id": "SlkXVpi165fbJd1a",
-          "name": "Discord Bot account"
         }
       }
     }
@@ -1695,375 +1134,99 @@
         ]
       ]
     },
-    "Webhook1": {
-      "main": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many rows in Supabase": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Create a row": {
       "main": [
         [
           {
-            "node": "Limit",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent1": {
-      "main": [
-        [
-          {
-            "node": "Convert to File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
+    "OpenRouter Chat Model1": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent1",
+            "node": "AI Agent2",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Simple Memory": {
-      "ai_memory": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
+    "Get many rows1": {
       "main": [
         [
           {
-            "node": "Code",
+            "node": "Split em Lotes",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get many rows in Supabase1": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory1": {
-      "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code": {
+    "AI Agent2": {
       "main": [
         [
           {
-            "node": "Get many rows",
+            "node": "Validar Resposta AI",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get many rows": {
+    "Split em Lotes": {
       "main": [
         [
           {
-            "node": "Update a row",
+            "node": "AI Agent2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Update a row": {
+    "Validar Resposta AI": {
       "main": [
         [
           {
-            "node": "Code2",
+            "node": "Merge Resultados",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Code2": {
+    "Merge Resultados": {
       "main": [
         [
           {
-            "node": "Create XLSX",
+            "node": "Gerar XLSX",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields": {
+    "Gerar XLSX": {
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Upload file2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Limit": {
+    "Wait": {
       "main": [
         [
           {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create XLSX": {
-      "main": [
-        [
-          {
-            "node": "Upload file",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload file": {
-      "main": [
-        [
-          {
-            "node": "Delete Desligados",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Afastamentos",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Estagiario",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Ferias",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Sindicato",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Exterior",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Aprendiz",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Admissao",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Dados",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Delete Ativos",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Delete Desligados": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Delete Afastamentos": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Delete Estagiario": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 2
-          }
-        ]
-      ]
-    },
-    "Delete Ferias": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 3
-          }
-        ]
-      ]
-    },
-    "Delete Sindicato": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 4
-          }
-        ]
-      ]
-    },
-    "Delete Exterior": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 5
-          }
-        ]
-      ]
-    },
-    "Delete Aprendiz": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 6
-          }
-        ]
-      ]
-    },
-    "Delete Admissao": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 7
-          }
-        ]
-      ]
-    },
-    "Delete Ativos": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 8
-          }
-        ]
-      ]
-    },
-    "Delete Dados": {
-      "main": [
-        [
-          {
-            "node": "Merge2",
-            "type": "main",
-            "index": 9
-          }
-        ]
-      ]
-    },
-    "Merge2": {
-      "main": [
-        [
-          {
-            "node": "Limit1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Limit1": {
-      "main": [
-        [
-          {
-            "node": "Send a message",
+            "node": "Get many rows1",
             "type": "main",
             "index": 0
           }
@@ -2075,11 +1238,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "13b9224d-6c30-4460-a244-e1e1b2da51cc",
+  "versionId": "6c1da5df-6822-4a65-a142-d4f97a169304",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ca824af82caf965dc6a9fe77732aa0f32f8a767586044bd4bc9e23fe28a05a98"
   },
-  "id": "Q2pC3GnIouf2u4OL",
+  "id": "CtUJpJJ5b5D93Yv0",
   "tags": []
 }
