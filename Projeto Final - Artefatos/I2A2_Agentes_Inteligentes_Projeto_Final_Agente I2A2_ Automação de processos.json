@@ -1,0 +1,478 @@
+{
+  "name": "I2A2_Agentes_Inteligentes_Projeto_Final_Agente I2A2_ Automação de processos",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        304
+      ],
+      "id": "4835735d-5c57-4120-9a35-48432472d832",
+      "name": "Compression",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\\\Users\\\\Kcruz\\\\Downloads\\\\202401_NFs.zip",
+        "options": {
+          "dataPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        624,
+        304
+      ],
+      "id": "c12ad1d5-f9ee-43e5-adc2-a407edaf1a98",
+      "name": "Read/Write Files from Disk",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "CHAVE DE ACESSO",
+              "field2": "CHAVE DE ACESSO"
+            }
+          ]
+        },
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1312,
+        288
+      ],
+      "id": "616fb2ce-5735-4abd-8d8a-17ad409000b7",
+      "name": "Merge",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file_0",
+        "options": {
+          "rawData": false
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        192
+      ],
+      "id": "56cedc09-f1d7-4757-a710-514fdb461f88",
+      "name": "Cabecalho",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file_1",
+        "options": {
+          "readAsString": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        400
+      ],
+      "id": "20807d51-e787-4634-a779-07efd1b3a1b6",
+      "name": "Itens",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Você é um agente de Inteligência Artificial com especialização em *análise financeira e documentos fiscais eletrônicos (NFes)*. Seu papel é atuar como analista de Business Intelligence (BI) da empresa, respondendo com precisão e clareza às perguntas dos usuários com base exclusivamente nos dados fornecidos nos arquivos CSV carregados previamente\n\nSeu comportamento deve seguir estas diretrizes:\n\n1. *Especialização*: Use seu conhecimento técnico em análise financeira, contas a pagar, compras públicas e documentos fiscais (ex: NFe, XML, DANFE).\n2. *Contexto restrito: Utilize **apenas* os dados presentes nos arquivos CSV fornecidos. Não invente ou extrapole informações.\n3. *Idioma*: Responda no mesmo idioma da pergunta feita (Português ou Inglês).\n4. *Clareza e educação*: Responda de forma clara, educada, objetiva e repetível. Mantenha sempre a paciência, mesmo diante de perguntas repetidas.\n5. *Raciocínio baseado em dados*: Sempre fundamente suas respostas com base nos dados. Quando aplicável, apresente cálculos simples (como somatórios, médias, máximos ou mínimos).\n6. *Limites do escopo*: Se uma pergunta não puder ser respondida com os dados fornecidos, informe isso educadamente.\n\nExemplos de perguntas que você deve responder:\n- \"Qual fornecedor recebeu o maior valor total em janeiro de 2024?\"\n- \"Qual item foi comprado em maior quantidade?\"\n- \"Qual o valor médio por nota fiscal?\"\n- \"Qual o total gasto com o item 'Parafuso Aço Inox 3/8'?\"\n- \"Qual a data da nota fiscal de maior valor?\"\n\n {{ $json.contexto }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        2304,
+        400
+      ],
+      "id": "34b590a5-ae93-4121-b761-8f14ebf71fd6",
+      "name": "AI Agent",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2464,
+        144
+      ],
+      "id": "f34f82ea-09eb-4429-86e6-e481138fed7e",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Olá! Como posso te ajudar hoje ?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        544,
+        -128
+      ],
+      "id": "1de0e45d-b3a9-4deb-8530-a74f4ca5ba6b",
+      "name": "When chat message received",
+      "webhookId": "4bc76ef5-9146-44e6-a34b-88fa8c21615c"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2768,
+        400
+      ],
+      "id": "2582fc2d-e26a-41ce-a5cb-16304ec899c5",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = '### DADOS DE VENDAS ###\\n\\n';\n\nfor (const item of items) {\n  texto += `numero_nota_fiscal: ${item.json.numero_nota_fiscal} | data_hora_emissao: ${item.json.data_hora_emissao} | cpf_cnpj_emitente: ${item.json.cpf_cnpj_emitente} | razao_social_emitente: ${item.json.razao_social_emitente} | uf_emitente: ${item.json.uf_emitente} | municipio_emitente: ${item.json.municipio_emitente} | nome_destinatario: ${item.json.nome_destinatario} | destino_da_operacao: ${item.json.destino_da_operacao} | descricao_do_produto_servico: ${item.json.descricao_do_produto_servico} | descricao_tipo_de_produto: ${item.json.descricao_tipo_de_produto} | quantidade: ${item.json.quantidade} | unidade: ${item.json.unidade} | valor_unitario: ${item.json.valor_unitario} | valor_total: ${item.json.valor_total}\\n`;\n}\n\nreturn [{ json: { contexto: texto } }]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1952,
+        288
+      ],
+      "id": "d0bfdbba-7e51-484f-b6d4-50685b747826",
+      "name": "Code",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed1a6a4b-e6af-4574-86bf-a236816c42c0",
+              "name": "numero_nota_fiscal",
+              "value": "={{ $json['CHAVE DE ACESSO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f7e547eb-3368-464b-a949-d80007524f5d",
+              "name": "data_hora_emissao",
+              "value": "={{ $json['DATA EMISSÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ae1e6e69-ae3b-48f2-996f-44fb654e5382",
+              "name": "cpf_cnpj_emitente",
+              "value": "={{ $json['CPF/CNPJ Emitente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "53e1fdb3-cc0d-4083-9232-b63abd3942e9",
+              "name": "razao_social_emitente",
+              "value": "={{ $json['RAZÃO SOCIAL EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4d978eeb-a0d4-4763-885e-3a9e7c488519",
+              "name": "uf_emitente",
+              "value": "={{ $json['UF EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "900e72d4-aace-4125-a5c0-e336414c1eec",
+              "name": "municipio_emitente",
+              "value": "={{ $json['MUNICÍPIO EMITENTE'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b90fdd00-aaec-47dc-8c8d-3153ccb96d8a",
+              "name": "nome_destinatario",
+              "value": "={{ $json['NOME DESTINATÁRIO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "aa703a76-2034-4de2-ba56-4dc6ba8bb031",
+              "name": "destino_da_operacao",
+              "value": "={{ $json['DESTINO DA OPERAÇÃO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1891e8e2-fa63-4896-8585-5dd0d2bd6773",
+              "name": "descricao_do_produto_servico",
+              "value": "={{ $json['DESCRIÇÃO DO PRODUTO/SERVIÇO'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2340603b-a24f-4478-90b8-417ba293b17a",
+              "name": "descricao_tipo_de_produto",
+              "value": "={{ $json['NCM/SH (TIPO DE PRODUTO)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ebd267e7-720a-4910-9700-8a3e5e7b3c10",
+              "name": "quantidade",
+              "value": "={{ $json.QUANTIDADE }}",
+              "type": "number"
+            },
+            {
+              "id": "61cb0901-16ff-4289-ab0a-a3eb7fb16913",
+              "name": "unidade",
+              "value": "={{ $json.UNIDADE }}",
+              "type": "string"
+            },
+            {
+              "id": "b0d7a848-890e-4e84-b2c4-705eaa9b5e71",
+              "name": "valor_unitario",
+              "value": "={{ $json['VALOR UNITÁRIO'] }}",
+              "type": "number"
+            },
+            {
+              "id": "7487737a-debd-4ad1-9981-01f5b624eed5",
+              "name": "valor_total",
+              "value": "={{ $json['VALOR TOTAL'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1632,
+        288
+      ],
+      "id": "c58e1cd2-b642-419a-a00e-9838ed913dd5",
+      "name": "Edit Fields",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2128,
+        0
+      ],
+      "id": "c55663a0-fe20-4fa8-b23e-0595c956e4f6",
+      "name": "Merge1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        624
+      ],
+      "id": "93110d70-dcf1-48c0-a784-427b8bff2f45",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        608
+      ],
+      "id": "76910a09-5800-43ed-88d5-66f2d20310d7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cCuR8CD5zUtSN4Si",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Cabecalho",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Itens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cabecalho": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Itens": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "65e138a1-5372-40d2-868c-823ad4aa6e5e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "96000daf5adde69d821106ef02f30f5fede01cd2fbdeddf5dd346c23bc231dff"
+  },
+  "id": "DDa80oO7snIsqAPJ",
+  "tags": []
+}
